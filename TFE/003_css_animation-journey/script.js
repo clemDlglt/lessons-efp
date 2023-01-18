@@ -20,10 +20,13 @@ const modalBtn = document.getElementById("modalBtn");
 const closeModalBtn = document.getElementById('clode-modal-btn');
 const modal = document.getElementById('modal-element');
 
+modal.classList.add('hide');
+
 modalBtn.addEventListener('click', () => {
-    modal.classList.add('display');
+    modal.classList.replace('hide', 'display');
 });
 
 closeModalBtn.addEventListener('click', () => { 
-    modal.classList.remove('display');
+    modal.classList.replace('display', 'hide');
 });
+

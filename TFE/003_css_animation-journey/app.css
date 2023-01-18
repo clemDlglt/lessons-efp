@@ -124,7 +124,9 @@ main {
 }
 
 .modal-overlay {
-  display: none;
+  z-index: -1;
+  opacity: 0;
+  display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -132,7 +134,8 @@ main {
   position: absolute;
   top: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color 2s;
 }
 
 .modal {
@@ -141,6 +144,8 @@ main {
   background-color: white;
   border-radius: 1rem;
   box-shadow: 0 0 3px 0px black;
+  transform: translateY(100%);
+  transition: transform 1s;
 }
 
 .modal-header {
@@ -156,8 +161,24 @@ main {
   text-align: center;
 }
 
-.display {
-  display: flex;
+.modal-overlay.display {
+  z-index: 10;
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.modal-overlay.display .modal {
+  transform: translateY(0%);
+}
+
+.modal-overlay.hide {
+  z-index: -1;
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+.modal-overlay.hide .modal {
+  transform: translateY(100%);
 }
 
 @keyframes sprite {
