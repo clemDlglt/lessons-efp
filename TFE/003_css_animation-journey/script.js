@@ -1,19 +1,26 @@
 const sidebarBtnToggle = document.getElementById("sidebarBtnToggle");
 const sidebar = document.getElementById('sidebar');
-let isShown = false;
+const sidebarContent = document.querySelector('#sidebar .content');
 
-sidebar.classList.add('hide');
+let isShown = false;
 
 sidebarBtnToggle.addEventListener('click', () => {
     isShown = !isShown;
 
     if (isShown) {
         sidebarBtnToggle.classList.add('active');
-        sidebar.classList.replace('hide', 'display');
+        sidebar.classList.add('display');
     } else {
         sidebarBtnToggle.classList.remove('active');
-        sidebar.classList.replace('display', 'hide');
+        sidebar.classList.remove('display');
     }
+});
+
+sidebarContent.addEventListener('transitionend', () => {
+    isShown
+        ? sidebar.classList.add('animate')
+        : sidebar.classList.remove('animate')
+    ;
 });
 
 const modalBtn = document.getElementById("modalBtn");
