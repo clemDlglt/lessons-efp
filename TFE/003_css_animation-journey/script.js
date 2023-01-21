@@ -18,15 +18,23 @@ sidebarBtnToggle.addEventListener('click', () => {
 
 const modalBtn = document.getElementById("modalBtn");
 const closeModalBtn = document.getElementById('clode-modal-btn');
-const modal = document.getElementById('modal-element');
+const modalOverlay = document.getElementById('modal-element');
+const modal = document.querySelector('.modal');
 
-modal.classList.add('hide');
+let displayed = false;
 
 modalBtn.addEventListener('click', () => {
-    modal.classList.replace('hide', 'display');
+    modalOverlay.classList.add('display');
+    modal.classList.add('display');
+    displayed = true;
 });
 
 closeModalBtn.addEventListener('click', () => { 
-    modal.classList.replace('display', 'hide');
+    modal.classList.remove('display');
+    displayed = false;
 });
 
+modal.addEventListener('transitionend', () => {
+    if (displayed) return;
+    modalOverlay.classList.remove('display');
+});
