@@ -17,10 +17,10 @@ function addTodo(event) {
     event.preventDefault();
 
     let id = 0;
-    if (localStorage.getItem('lastId') !== null) {
-        id = parseInt(localStorage.getItem('lastId')) + 1;
+    if (localLoad('lastId') !== null) {
+        id = parseInt(localLoad('lastId')) + 1;
     }
-    localStorage.setItem('lastId', id);
+    localSave('lastId', id);
 
     const todo = {
         id: id,
@@ -88,27 +88,6 @@ function deleteCheck(e) {
     }
 }
 
-function localLoad(key) {
-    return JSON.parse(localStorage.getItem(key));
-}
-
-function localSave(key, value) {
-    localStorage.setItem(key, JSON.stringify(value));
-}
-
-function removeTodoFromStorage(id) {
-    todos = localLoad('todos');
-    todos.splice(todos.findIndex(todo => todo.id === id), 1);
-    localSave('todos', todos);
-}
-
-function changeStatusInStorage(id) {
-    todos = localLoad('todos');
-    const selectedTodo = todos.find(todo => todo.id === id);
-    selectedTodo.done = !selectedTodo.done;
-    localSave('todos', todos);
-}
-
 function filterTodo(e) {
     const todos = todoList.childNodes;
     console.log({todos, todoList})
@@ -143,33 +122,30 @@ function filterTodo(e) {
     });
 }
 
-
 function saveLocalTodos(todo){
     //CHECK -- DO I ALREADY HAVE THINGS HERE?
     let todos;
-    if (localStorage.getItem('todos') === null) {
+    if (localLoad('todos') === null) {
         todos = [];
     } else {
-        todos = JSON.parse(localStorage.getItem('todos'));  
+        todos = localLoad('todos');  
     }
     
     todos.push(todo);
-    localStorage.setItem('todos', JSON.stringify(todos));
+    localSave('todos', todos);
 }
 
 function getTodos() {
     let todos;
 
     //CHECK -- DO I ALREADY HAVE THINGS HERE?
-    if (localStorage.getItem('todos') === null) {
+    if (localLoad('todos') === null) {
         todos = [];
     } else {
-        todos = JSON.parse(localStorage.getItem('todos')); 
-        console.log(todos);
+        todos = localLoad('todos')  ; 
     }
     
     todos.forEach(function (todo) {
-        console.log(todo);
         displayTodo(todo);
         // // TodoDIV
         // const todoDiv = document.createElement('div');
@@ -262,6 +238,28 @@ function createElement({tag, content, classes = [], parent}) {
     return element;
 }
 
+// Local storage related functions
 function getTodoId(elementId) {
     return parseInt(elementId.split('-')[1]);
+}
+
+function localLoad(key) {
+    return JSON.parse(localStorage.getItem(key));
+}
+
+function localSave(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+}
+
+function removeTodoFromStorage(id) {
+    todos = localLoad('todos');
+    todos.splice(todos.findIndex(todo => todo.id === id), 1);
+    localSave('todos', todos);
+}
+
+function changeStatusInStorage(id) {
+    todos = localLoad('todos');
+    const selectedTodo = todos.find(todo => todo.id === id);
+    selectedTodo.done = !selectedTodo.done;
+    localSave('todos', todos);
 }
