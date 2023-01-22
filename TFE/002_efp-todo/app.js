@@ -15,6 +15,7 @@ todoButton.addEventListener("click", addTodo);
 todoList.addEventListener("click", deleteCheck);
 filterOption.addEventListener("click", filterTodo);
 editForm.addEventListener('submit', editTodo);
+editCancelBtn.addEventListener('click', closeEditModal);
 
 getTodos();
 
@@ -75,6 +76,7 @@ function editTodo(event) {
     .content = editInput.value;
     localSave('todos', todos);
 
+    reloadTodoList();
     closeEditModal();
 }
 
@@ -252,6 +254,11 @@ function displayTodo(todo) {
     todoList.appendChild(todoDiv);
 }
 
+function reloadTodoList() {
+    todoList.innerHTML = '';
+    getTodos();
+}
+
 // Fonction générique pour générer du HTML :
 function createElement({tag, content, classes = [], parent}) {
     const element = document.createElement(tag);
@@ -269,9 +276,6 @@ function openEditModal(editedItem) {
 }
 
 function closeEditModal() {
-    todoList.innerHTML = '';
-    getTodos();
-    
     modalOverlay.classList.remove('display');
 }
 
