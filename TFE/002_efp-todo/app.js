@@ -3,11 +3,18 @@ const todoInput = document.querySelector('.todo-input');
 const todoButton = document.querySelector('.todo-button');
 const todoList = document.querySelector('.todo-list');
 const filterOption = document.querySelector('.filter-todo');
+const modalOverlay = document.getElementById('modal-overlay');
+const modal = document.getElementById('modal');
+const editInput = document.getElementById('edit-input');
+const editHidden = document.getElementById('edit-hidden');
+const editForm = document.getElementById('edit-form');
+const editCancelBtn = document.getElementById('edit-cancel');
 
 // Event Listeners
 todoButton.addEventListener("click", addTodo);
 todoList.addEventListener("click", deleteCheck);
 filterOption.addEventListener("click", filterTodo);
+editForm.addEventListener('submit', editTodo);
 
 getTodos();
 
@@ -58,6 +65,17 @@ function addTodo(event) {
 
     //Clear TO DO INPUT VALUE
     todoInput.value = "";
+}
+
+function editTodo(event) {
+    event.preventDefault();
+
+    const todos = localLoad('todos');
+    todos.find((todo) => todo.id === parseInt(editHidden.value))
+    .content = editInput.value;
+    localSave('todos', todos);
+
+    closeEditModal();
 }
 
 function deleteCheck(e) {
@@ -197,7 +215,14 @@ function displayTodo(todo) {
         id: 'todo-' + todo.id,
         classes: ['todo-item'],
         parent: todoDiv,
+    }).addEventListener('click', (event) => {
+        const editedTodo = {
+            id: getTodoId(event.srcElement.parentElement.id),
+            content: event.srcElement.textContent,
+        };
+        openEditModal(editedTodo);
     });
+
     
     // CHECK MARK BUTTON ===> We can use both: .createElement() or innerHTML()
     // const completedButton = document.createElement('button');
@@ -237,11 +262,24 @@ function createElement({tag, content, classes = [], parent}) {
     return element;
 }
 
-// Local storage related functions :
+function openEditModal(editedItem) {
+    editInput.value = editedItem.content;
+    editHidden.value = editedItem.id;
+    modalOverlay.classList.add('display');
+}
+
+function closeEditModal() {
+    todoList.innerHTML = '';
+    getTodos();
+    
+    modalOverlay.classList.remove('display');
+}
 
 function getTodoId(elementId) {
     return parseInt(elementId.split('-')[1]);
 }
+
+// Local storage related functions :
 
 function localLoad(key) {
     return JSON.parse(localStorage.getItem(key));
