@@ -13,7 +13,6 @@ getTodos();
 
 // Functions
 function addTodo(event) {
-    // Prevent form from submitting
     event.preventDefault();
 
     let id = 0;
@@ -238,7 +237,8 @@ function createElement({tag, content, classes = [], parent}) {
     return element;
 }
 
-// Local storage related functions
+// Local storage related functions :
+
 function getTodoId(elementId) {
     return parseInt(elementId.split('-')[1]);
 }

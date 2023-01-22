@@ -143,3 +143,26 @@ select {
     background:white;
     color: #ff6f47;
 }
+
+.modal-overlay {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(216, 135, 113, 0);
+    opacity: 0;
+    transition: opacity 0.1s, background-color 1s;
+}
+
+.modal {
+    width: 50%;
+}
+
+.modal-overlay.display {
+    opacity: 1;
+    background-color: rgba(216, 135, 113, 0.8);
+}
