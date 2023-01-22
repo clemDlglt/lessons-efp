@@ -69,7 +69,8 @@ function deleteCheck(e) {
     // TODO Peut-etre utiliser l'id de l'élément plutôt que sa classe
     if(item.classList[0] === 'trash-btn'){
         const todo = item.parentElement;
-        removeTodo(getTodoId(todo.id));
+
+        removeTodoFromStorage(getTodoId(todo.id));
     
         todo.classList.add('fall');
         todo.addEventListener("transitionend", function() {
@@ -80,14 +81,32 @@ function deleteCheck(e) {
     //CHECK MARK
     if(item.classList[0] === 'completed-btn'){
         const todo = item.parentElement;
+
+        changeStatusInStorage(getTodoId(todo.id));
+
         todo.classList.toggle('completed');
     }
 }
 
-function removeTodo(id) {
-    todos = JSON.parse(localStorage.getItem('todos'));
-    todos.splice(todos.findIndex(todo => todo.id = id), 1);
-    localStorage.setItem('todos', JSON.stringify(todos));
+function localLoad(key) {
+    return JSON.parse(localStorage.getItem(key));
+}
+
+function localSave(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+}
+
+function removeTodoFromStorage(id) {
+    todos = localLoad('todos');
+    todos.splice(todos.findIndex(todo => todo.id === id), 1);
+    localSave('todos', todos);
+}
+
+function changeStatusInStorage(id) {
+    todos = localLoad('todos');
+    const selectedTodo = todos.find(todo => todo.id === id);
+    selectedTodo.done = !selectedTodo.done;
+    localSave('todos', todos);
 }
 
 function filterTodo(e) {
@@ -186,7 +205,10 @@ function getTodos() {
 // Fonction générique pour afficher les tâches :
 function displayTodo(todo) {
     const todoDiv = document.createElement('div');
+
     todoDiv.classList.add('todo');
+    if (todo.done) todoDiv.classList.add('completed');
+      
     todoDiv.setAttribute('id', 'todo-' + todo.id);
 
     // Create LI
@@ -241,5 +263,5 @@ function createElement({tag, content, classes = [], parent}) {
 }
 
 function getTodoId(elementId) {
-    return elementId.split('-')[1];
+    return parseInt(elementId.split('-')[1]);
 }
